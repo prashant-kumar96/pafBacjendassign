@@ -26,6 +26,7 @@ const verifyToken = (req, res, next) => {
 };
 
 apiRouter.get("/countryInformation", verifyToken, (req, res) => {
+  console.log("his is run");
   countryInformation(req, res);
 });
 

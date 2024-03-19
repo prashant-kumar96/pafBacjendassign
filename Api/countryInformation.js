@@ -11,12 +11,10 @@ const runFunction = (country, res) => {
     .catch(function (error) {
       console.log(error);
       console.log(error.data);
-      res
-        .status(400)
-        .send({
-          message: "The country name provided is not correct",
-          err: error.message,
-        });
+      res.status(400).send({
+        message: "The country name provided is not correct",
+        err: error.message,
+      });
     })
     .finally(function () {
       // always executed

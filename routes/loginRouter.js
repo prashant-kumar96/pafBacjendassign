@@ -2,6 +2,8 @@ import express from "express";
 const loginRouter = express.Router();
 const { user_name, password, userid, JWT_SECRET_KEY } = process.env;
 import jwt from "jsonwebtoken";
+
+// this api is created to create a token
 loginRouter.post("/", (req, res) => {
   try {
     const recievedUsername = req?.body?.username;

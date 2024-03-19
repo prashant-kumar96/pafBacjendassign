@@ -2,7 +2,7 @@ const { API_URL } = process.env;
 import axios from "axios"; // axios is used for hitting api's
 const runFunction = (
   filter = "greaterThan",
-  value = 0,
+  providedValue = 0,
   pageNumber = 1,
   pageSize = 5,
   res
@@ -19,6 +19,7 @@ const runFunction = (
           population: value.population,
         };
       });
+      // here the result has array of object with all countries name and its  population
 
       console.log(result);
       if (filter === "largest") {
@@ -31,8 +32,7 @@ const runFunction = (
           }
         });
 
-        console.log(largest);
-        console.log(countryname);
+        res.status(200).json({ countryName: countryname, population: largest });
       } else if (filter === "smallest") {
         let smallest = result[0].population;
         let countryname = result[0].name;
@@ -42,17 +42,41 @@ const runFunction = (
             countryname = value.name;
           }
         });
-        console.log(smallest);
-        console.log(countryname);
+
+        res
+          .status(200)
+          .json({ countryName: countryname, population: smallest });
+      } else if (filter === "greaterThan") {
+        const requiredResult = result.forEach((value) => {
+          if (value.population > providedValue) {
+            return value;
+          }
+        });
+
+        const paginatedData = requiredResult.slice(startIndex, endIndex);
+        res.status(200).send({
+          totalItems: requiredResult.length,
+          page: pageNumber,
+          pageSize: pageSize,
+          totalPages: Math.ceil(requiredResult.length / pageSize),
+          data: paginatedData,
+        });
+      } else if (filter === "smallerThan") {
+        const requiredResult = result.forEach((value) => {
+          if (value.population < providedValue) {
+            return value;
+          }
+        });
+
+        const paginatedData = requiredResult.slice(startIndex, endIndex);
+        res.status(200).send({
+          totalItems: requiredResult.length,
+          page: pageNumber,
+          pageSize: pageSize,
+          totalPages: Math.ceil(requiredResult.length / pageSize),
+          data: paginatedData,
+        });
       }
-      const paginatedData = result.slice(startIndex, endIndex);
-      res.status(200).send({
-        totalItems: result.length,
-        page: pageNumber,
-        pageSize: pageSize,
-        totalPages: Math.ceil(result.length / pageSize),
-        data: paginatedData,
-      });
     })
     .catch(function (error) {
       console.log(error);
