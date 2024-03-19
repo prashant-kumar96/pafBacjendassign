@@ -8,6 +8,8 @@ const runFunction = (
   res
 ) => {
   let url = `${API_URL}/v3.1/all?fields=population,name`;
+  console.log(filter);
+  console.log(providedValue);
   axios
     .get(url)
     .then(function (response) {
@@ -21,7 +23,7 @@ const runFunction = (
       });
       // here the result has array of object with all countries name and its  population
 
-      console.log(result);
+      // console.log(result);
       if (filter === "largest") {
         let largest = 0;
         let countryname = "";
@@ -47,13 +49,13 @@ const runFunction = (
           .status(200)
           .json({ countryName: countryname, population: smallest });
       } else if (filter === "greaterThan") {
-        const requiredResult = result.forEach((value) => {
+        const requiredResult = result.map((value) => {
           if (value.population > providedValue) {
             return value;
           }
         });
 
-        const paginatedData = requiredResult.slice(startIndex, endIndex);
+        const paginatedData = requiredResult?.slice(startIndex, endIndex);
         res.status(200).send({
           totalItems: requiredResult.length,
           page: pageNumber,
@@ -62,7 +64,7 @@ const runFunction = (
           data: paginatedData,
         });
       } else if (filter === "smallerThan") {
-        const requiredResult = result.forEach((value) => {
+        const requiredResult = result.map((value) => {
           if (value.population < providedValue) {
             return value;
           }
@@ -92,7 +94,7 @@ const runFunction = (
 export const getCountriesByPopulation = (req, res) => {
   runFunction(
     req.query.filter,
-    req.query.value,
+    req.query.providedValue,
     req.query.page,
     req.query.pageSize,
     res

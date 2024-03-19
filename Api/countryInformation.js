@@ -12,7 +12,8 @@ const runFunction = (country, res) => {
       console.log(error);
       console.log(error.data);
       res.status(400).send({
-        message: "The country name provided is not correct",
+        message:
+          "The country name provided is not correct or parameter country is not provided properly",
         err: error.message,
       });
     })

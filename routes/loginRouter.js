@@ -12,10 +12,10 @@ loginRouter.post("/", (req, res) => {
     if (recievedUsername?.length === 0 || recievedPassword?.length === 0) {
       res
         .status(400)
-        .json({ message: `Please provide a username and password ` });
+        .json({ message: `Please provide a username and/or password ` });
     } else if (user_name !== recievedUsername) {
       res.status(400).json({
-        message: `user with username: ${user_name} does not exist `,
+        message: `user with username: ${recievedUsername} does not exist `,
       });
     } else if (
       user_name === recievedUsername &&
